@@ -61,3 +61,8 @@ TextStyle contentRequirements = GoogleFonts.poppins(
   fontWeight: FontWeight.w300,
 );
 
+Color primaryColor = Color(0xff4141A4);
+Color blackColor = Color(0xff272C2F);
+TextStyle blackTextStyle = GoogleFonts.poppins(
+  color: blackColor,
+);

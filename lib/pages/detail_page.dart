@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:future_jobs/models/job_model.dart';
 import 'package:future_jobs/theme.dart';
 import 'package:future_jobs/widgets/posted_card.dart';
 
 class DetailPage extends StatefulWidget {
-  final String? imageUrl;
-  final String? jobTitle;
-  final String? company;
-  DetailPage({this.company, this.imageUrl, this.jobTitle});
+  final JobModel job;
+  // final String? imageUrl;
+  // final String? jobTitle;
+  // final String? company;
+  DetailPage(this.job);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -73,6 +75,109 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
+    Widget detailItem(String text) {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 16,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.adjust,
+              color: primaryColor,
+              size: 12,
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Expanded(
+              child: Text(
+                text,
+                style: blackTextStyle.copyWith(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget aboutTheJob() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 30,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'About the job',
+              style: blackTextStyle.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Column(
+              children:
+                  widget.job.about?.map((text) => detailItem(text)).toList() ??
+                      [],
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget qualifications() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 30,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Qualifications',
+              style: blackTextStyle.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Column(
+              children: widget.job.qualifications
+                      ?.map((text) => detailItem(text))
+                      .toList() ??
+                  [],
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget responsibilities() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 30,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Responsibilities',
+              style: blackTextStyle.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Column(
+              children: widget.job.responsibilities
+                      ?.map((text) => detailItem(text))
+                      .toList() ??
+                  [],
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -86,8 +191,8 @@ class _DetailPageState extends State<DetailPage> {
                         height: 80,
                       ),
                 Center(
-                  child: Image.asset(
-                    widget.imageUrl ?? '',
+                  child: Image.network(
+                    widget.job.companyLogo ?? '',
                     height: 60,
                   ),
                 ),
@@ -96,7 +201,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Center(
                   child: Text(
-                    widget.jobTitle ?? '',
+                    widget.job.name ?? '',
                     style: jobTextStyle.copyWith(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
@@ -108,7 +213,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Center(
                   child: Text(
-                    '${widget.company}, inc • Jakarta',
+                    '${widget.job.companyName} • ${widget.job.location}',
                     style: companyTextStyle.copyWith(
                       color: Color(0xffB3B5C4),
                     ),
@@ -125,177 +230,14 @@ class _DetailPageState extends State<DetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'About the job',
-                        style: titleRequirements,
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/dot.png',
-                            width: 12,
-                            height: 12,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text('Full-Time On Site'),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/dot.png',
-                            width: 12,
-                            height: 12,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text('Start at \$18,000 per month'),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      aboutTheJob(),
+                      qualifications(),
+                      responsibilities(),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 24,
-                    right: 24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Qualifications',
-                        style: titleRequirements,
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/dot.png',
-                            width: 12,
-                            height: 12,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                              'Candidate must possess at least a Bachelor\'s Degree.'),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/dot.png',
-                            width: 12,
-                            height: 12,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'Able to use Microsoft Office and Google based service.',
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/dot.png',
-                            width: 12,
-                            height: 12,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Flexible(
-                            child: Text(
-                              'Have an excellent time management, good at organized and details',
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 24,
-                    right: 24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Responsibilities',
-                        style: titleRequirements,
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/dot.png',
-                            width: 12,
-                            height: 12,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Flexible(
-                            child: Text(
-                                'Initiate and promote any programs, events, training, or activities.'),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/dot.png',
-                            width: 12,
-                            height: 12,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Flexible(
-                            child: Text(
-                              'Assessing and anticipating needs and collaborate with Division.',
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 51,
-                      ),
-                    ],
-                  ),
+                SizedBox(
+                  height: 30,
                 ),
                 Center(
                   child: SizedBox(

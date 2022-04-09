@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:future_jobs/models/category_model.dart';
 import 'package:future_jobs/pages/categories_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class JobCard extends StatelessWidget {
-  final String? text;
-  final String? imageUrl;
+  final CategoryModel category;
+  //final String? text;
+  // final String? imageUrl;
 
-  JobCard({this.text, this.imageUrl});
+  JobCard(this.category);
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +17,7 @@ class JobCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CategoriesPage(
-              jobTitleHome: text,
-              imageUrl: imageUrl,
-            ),
+            builder: (context) => CategoriesPage(category),
           ),
         );
       },
@@ -31,7 +30,7 @@ class JobCard extends StatelessWidget {
             width: 150,
             child: Stack(
               children: [
-                Image.asset(imageUrl ?? ''),
+                Image.network(category.imageUrl ?? ''),
                 Container(
                   height: 200,
                   width: 150,
@@ -55,7 +54,7 @@ class JobCard extends StatelessWidget {
                       right: 16,
                     ),
                     child: Text(
-                      text ?? '',
+                      category.name ?? '',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 18,

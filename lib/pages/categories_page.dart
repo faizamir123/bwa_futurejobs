@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:future_jobs/models/category_model.dart';
+import 'package:future_jobs/models/job_model.dart';
+import 'package:future_jobs/providers/job_provider.dart';
 import 'package:future_jobs/theme.dart';
 import 'package:future_jobs/widgets/posted_card.dart';
+import 'package:provider/provider.dart';
 
 class CategoriesPage extends StatelessWidget {
-  final String? jobTitleHome;
-  final String? imageUrl;
+  final CategoryModel category;
+  //final String? jobTitleHome;
+  // final String? imageUrl;
 
-  CategoriesPage({this.imageUrl, this.jobTitleHome});
+  CategoriesPage(this.category);
 
   @override
   Widget build(BuildContext context) {
+    var jobProvider = Provider.of<JobProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -31,8 +37,8 @@ class CategoriesPage extends StatelessWidget {
                         Container(
                           width: MediaQuery.of(context).size.width,
                           height: 270,
-                          child: Image.asset(
-                            imageUrl ?? '',
+                          child: Image.network(
+                            category.imageUrl ?? '',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -60,7 +66,7 @@ class CategoriesPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(jobTitleHome ?? '',
+                              Text(category.name ?? '',
                                   style: jobTitleTextStyle),
                               Text(
                                 '12,309 available',
@@ -93,21 +99,39 @@ class CategoriesPage extends StatelessWidget {
                         SizedBox(
                           height: 16,
                         ),
-                        PostedCard(
-                          imageUrl: 'assets/company_1.png',
-                          company: 'Google',
-                          job: 'Front-End Developer',
-                        ),
-                        PostedCard(
-                          imageUrl: 'assets/company_2.png',
-                          job: 'UI Designer',
-                          company: 'Instagram',
-                        ),
-                        PostedCard(
-                          imageUrl: 'assets/company_3.png',
-                          job: 'Data Scientis',
-                          company: 'Facebook',
-                        ),
+                        FutureBuilder<List<JobModel>>(
+                            future:
+                                jobProvider.getJobsByCategory(category.name),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                var data = snapshot.data as List<JobModel>;
+                                return Column(
+                                  children: data
+                                      .map((job) => PostedCard(job))
+                                      .toList(),
+                                );
+                              } else {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            }),
+                        // PostedCard(
+                        //   imageUrl: 'assets/company_1.png',
+                        //   company: 'Google',
+                        //   job: 'Front-End Developer',
+                        // ),
+                        // PostedCard(
+                        //   imageUrl: 'assets/company_2.png',
+                        //   job: 'UI Designer',
+                        //   company: 'Instagram',
+                        // ),
+                        // PostedCard(
+                        //   imageUrl: 'assets/company_3.png',
+                        //   job: 'Data Scientis',
+                        //   company: 'Facebook',
+                        // ),
                       ],
                     ),
                   ),
@@ -132,21 +156,38 @@ class CategoriesPage extends StatelessWidget {
                         SizedBox(
                           height: 16,
                         ),
-                        PostedCard(
-                          imageUrl: 'assets/company_1.png',
-                          company: 'Google',
-                          job: 'Front-End Developer',
-                        ),
-                        PostedCard(
-                          imageUrl: 'assets/company_2.png',
-                          job: 'UI Designer',
-                          company: 'Instagram',
-                        ),
-                        PostedCard(
-                          imageUrl: 'assets/company_3.png',
-                          job: 'Data Scientis',
-                          company: 'Facebook',
-                        ),
+                        FutureBuilder<List<JobModel>>(
+                            future: jobProvider.getJobs(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                var data = snapshot.data as List<JobModel>;
+                                return Column(
+                                  children: data
+                                      .map((job) => PostedCard(job))
+                                      .toList(),
+                                );
+                              } else {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            }),
+                        // PostedCard(
+                        //   imageUrl: 'assets/company_1.png',
+                        //   company: 'Google',
+                        //   job: 'Front-End Developer',
+                        // ),
+                        // PostedCard(
+                        //   imageUrl: 'assets/company_2.png',
+                        //   job: 'UI Designer',
+                        //   company: 'Instagram',
+                        // ),
+                        // PostedCard(
+                        //   imageUrl: 'assets/company_3.png',
+                        //   job: 'Data Scientis',
+                        //   company: 'Facebook',
+                        // ),
                       ],
                     ),
                   ),

@@ -1,9 +1,13 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:future_jobs/models/user_model.dart';
 import 'package:future_jobs/pages/home_page.dart';
 import 'package:future_jobs/pages/signup_page.dart';
+import 'package:future_jobs/providers/auth_provider.dart';
+import 'package:future_jobs/providers/user_provider.dart';
 import 'package:future_jobs/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -14,11 +18,24 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   bool isEmailValid = true;
+  bool isLoading = false;
 
   TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
+    var authProvider = Provider.of<AuthProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
+    void showError(String message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(message),
+        ),
+      );
+    }
+
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -121,6 +138,7 @@ class _SignInPageState extends State<SignInPage> {
                       SizedBox(
                         height: 45,
                         child: TextFormField(
+                          controller: passwordController,
                           obscureText: true,
                           decoration: InputDecoration(
                             fillColor: Color(0xffF1F0F5),
@@ -145,26 +163,53 @@ class _SignInPageState extends State<SignInPage> {
                       Container(
                         width: MediaQuery.of(context).size.width - (2 * 24),
                         height: 45,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Color(0xff4141A4),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(66),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
+                        // SOMETIMES SERVER DOWN (STATUS CODE = 503)
+                        child: isLoading
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Color(0xff4141A4),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(66),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  if (emailController.text.isEmpty ||
+                                      passwordController.text.isEmpty) {
+                                    showError('Semua fields harus diisi');
+                                  } else {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    UserModel? user = await authProvider.login(
+                                      emailController.text,
+                                      passwordController.text,
+                                    );
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    if (user == null) {
+                                      showError('email atau password salah');
+                                    } else {
+                                      userProvider.user = user;
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => HomePage(),
+                                          ),
+                                          (route) => false);
+                                    }
+                                  }
+                                },
+                                child: Text(
+                                  'Sign In',
+                                  style: buttonTextStyle,
+                                ),
                               ),
-                            );
-                          },
-                          child: Text(
-                            'Sign In',
-                            style: buttonTextStyle,
-                          ),
-                        ),
                       ),
                       SizedBox(
                         height: 20,

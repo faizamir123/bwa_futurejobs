@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:future_jobs/models/job_model.dart';
 import 'package:future_jobs/pages/detail_page.dart';
 import 'package:future_jobs/theme.dart';
 import 'package:future_jobs/pages/detail_page.dart';
 
 class PostedCard extends StatelessWidget {
-  final String? job;
-  final String? company;
-  final String? imageUrl;
+  final JobModel job;
+  //final String? job;
+  // final String? company;
+  // final String? imageUrl;
 
-  PostedCard({this.company, this.imageUrl, this.job});
+  PostedCard(this.job);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +24,7 @@ class PostedCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DetailPage(
-                  company: company,
-                  jobTitle: job,
-                  imageUrl: imageUrl,
-                ),
+                builder: (context) => DetailPage(job),
               ),
             );
           },
@@ -37,8 +35,8 @@ class PostedCard extends StatelessWidget {
                 width: 10,
               ),
               Center(
-                child: Image.asset(
-                  imageUrl ?? '',
+                child: Image.network(
+                  job.companyLogo ?? '',
                   height: 45,
                 ),
               ),
@@ -50,11 +48,11 @@ class PostedCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(job ?? '', style: jobTextStyle),
+                    Text(job.name ?? '', style: jobTextStyle),
                     SizedBox(
                       height: 2,
                     ),
-                    Text(company ?? '', style: companyTextStyle),
+                    Text(job.companyName ?? '', style: companyTextStyle),
                     SizedBox(
                       height: 18.5,
                     ),
