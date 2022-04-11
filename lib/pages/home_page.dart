@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                   style: titleTextStyle,
                 ),
                 Text(
-                  userProvider.user?.name ?? '',
+                  userProvider.user?.name ?? 'USER',
                   style: subTitleTextStyle,
                 ),
               ],
