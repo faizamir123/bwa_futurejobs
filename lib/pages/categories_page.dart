@@ -38,7 +38,7 @@ class CategoriesPage extends StatelessWidget {
                           width: MediaQuery.of(context).size.width,
                           height: 270,
                           child: Image.network(
-                            category.imageUrl ?? '',
+                            category.imageUrl,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -66,8 +66,7 @@ class CategoriesPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(category.name ?? '',
-                                  style: jobTitleTextStyle),
+                              Text(category.name, style: jobTitleTextStyle),
                               Text(
                                 '12,309 available',
                                 style: jobSubTitleTextStyle,

@@ -30,7 +30,7 @@ class JobCard extends StatelessWidget {
             width: 150,
             child: Stack(
               children: [
-                Image.network(category.imageUrl ?? ''),
+                Image.network(category.imageUrl),
                 Container(
                   height: 200,
                   width: 150,
@@ -54,7 +54,7 @@ class JobCard extends StatelessWidget {
                       right: 16,
                     ),
                     child: Text(
-                      category.name ?? '',
+                      category.name,
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 18,
