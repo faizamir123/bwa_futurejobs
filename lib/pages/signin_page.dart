@@ -164,6 +164,7 @@ class _SignInPageState extends State<SignInPage> {
                         width: MediaQuery.of(context).size.width - (2 * 24),
                         height: 45,
                         // SOMETIMES SERVER DOWN (STATUS CODE = 503)
+                        // COMMENT THIS SECTION TO PROCEED TO HOMEPAGE IF THE SERVER IS DOWN
                         child: isLoading
                             ? Center(
                                 child: CircularProgressIndicator(),
@@ -196,6 +197,7 @@ class _SignInPageState extends State<SignInPage> {
                                       showError('email atau password salah');
                                     } else {
                                       userProvider.user = user;
+                                      //--------------------------------------------------//
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
