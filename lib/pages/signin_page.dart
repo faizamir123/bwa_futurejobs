@@ -164,7 +164,6 @@ class _SignInPageState extends State<SignInPage> {
                         width: MediaQuery.of(context).size.width - (2 * 24),
                         height: 45,
                         // SOMETIMES SERVER DOWN (STATUS CODE = 503)
-                        // COMMENT THIS SECTION TO PROCEED TO HOMEPAGE IF THE SERVER IS DOWN
                         child: isLoading
                             ? Center(
                                 child: CircularProgressIndicator(),
@@ -181,6 +180,7 @@ class _SignInPageState extends State<SignInPage> {
                                       passwordController.text.isEmpty) {
                                     showError('Semua fields harus diisi');
                                   } else {
+                                    // COMMENT THIS SECTION TO PROCEED TO HOMEPAGE IF THE SERVER IS DOWN
                                     setState(() {
                                       isLoading = true;
                                     });
@@ -204,7 +204,7 @@ class _SignInPageState extends State<SignInPage> {
                                             builder: (context) => HomePage(),
                                           ),
                                           (route) => false);
-                                    }
+                                    } // AND COMMENT ONE CURLY BRACKET
                                   }
                                 },
                                 child: Text(

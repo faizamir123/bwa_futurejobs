@@ -285,7 +285,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     width: MediaQuery.of(context).size.width - (2 * 24),
                     height: 45,
                     // SOMETIMES SERVER DOWN (STATUS CODE = 503)
-                    // COMMENT THIS SECTION TO PROCEED TO HOMEPAGE IF THE SERVER IS DOWN
                     child: isLoading
                         ? Center(
                             child: CircularProgressIndicator(),
@@ -308,6 +307,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         content:
                                             Text('semua fields harus diisi')));
                               } else {
+                                // COMMENT THIS SECTION TO PROCEED TO HOMEPAGE IF THE SERVER IS DOWN
                                 setState(() {
                                   isLoading = true;
                                 });
@@ -333,7 +333,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         builder: (context) => HomePage(),
                                       ),
                                       (route) => false);
-                                }
+                                } // AND COMMENT ONE CURLY BRACKET
                               }
                             },
                             child: Text(
